@@ -57,8 +57,11 @@
             description="downloads org.commandlinetools.gres direct and indirect dependencies using ivy.xml">
         <echo message="using ivy to resolve commons-lang 2.1..."/>
         <ivy:resolve file="${ivy.xml}"/>
-        <ivy:cachepath organisation="commons-lang" module="commons-lang" revision="2.1"
-                       pathid="lib.path.id" inline="true"/>
+        <!--<ivy:cachepath organisation="commons-lang" module="commons-lang" revision="2.1"
+                       pathid="lib.path.id" inline="true"/>-->
+        <ivy:retrieve pattern="${lib.dir}/[artifact].[revision].[ext]"
+                type="jar,bundle"
+                sync="true" />
     </target>
 
     <target name="get-via-web" description="get dependencies not yet available via ivy">
