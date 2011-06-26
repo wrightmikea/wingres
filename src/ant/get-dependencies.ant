@@ -53,12 +53,23 @@
                  uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
     </target>
 
-    <target name="download-dependencies" depends="install-ivy"
+    <target name="get-via-ivy" depends="install-ivy"
             description="downloads org.commandlinetools.gres direct and indirect dependencies using ivy.xml">
         <echo message="using ivy to resolve commons-lang 2.1..."/>
         <ivy:resolve file="${ivy.xml}"/>
         <ivy:cachepath organisation="commons-lang" module="commons-lang" revision="2.1"
                        pathid="lib.path.id" inline="true"/>
+    </target>
+
+    <target name="get-via-web" description="get dependencies not yet available via ivy">
+        <mkdir dir="${lib.dir}/gres" />
+        <get dest="${lib.dir}/gres">
+            <url url="${gres.jar.url}"/>
+        </get>
+    </target>
+
+    <target name="download-dependencies" depends="get-via-ivy,get-via-web"
+            description="use ivy and get-from-web to satisfy dependencies">
     </target>
 
     <target name="clean-ivy-cache" depends="install-ivy"
