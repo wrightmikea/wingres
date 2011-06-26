@@ -20,6 +20,8 @@ package org.commandlinetools.wingres.installer;
 import junit.framework.TestCase;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Tests the wingres installer
@@ -32,10 +34,10 @@ public class InstallerTest extends TestCase {
     assertEquals("postcondition: target directory created", true, tmpDir.exists());
   }
   private File newTempDir() {
-    File result = new File("./tmp/tmp1");
-    while(result.exists()) {
-      result = new File(result.getAbsolutePath() + "1");
-    }
+    Date now = new Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyymmdd-HHmmss-SSS");
+    String ts = sdf.format(now);
+    File result = new File("tmp","wingres" + ts);
     return result;
   }
 }

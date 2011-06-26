@@ -28,7 +28,7 @@ public class Main {
     if (0 < args.length) {
       System.err.println("args[0]=" + args[0]);
       File target = new File(args[0]);
-      boolean created = target.mkdir();
+      boolean created = target.mkdirs();
       if (!created) {
         System.err.println("Wingres Installer unable to create " + target.getAbsolutePath());
       }
