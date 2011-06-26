@@ -37,7 +37,7 @@ public class InstallerTest extends TestCase {
     Date now = new Date();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyymmdd-HHmmss-SSS");
     String ts = sdf.format(now);
-    File result = new File("tmp","wingres" + ts);
+    File result = new File("wingres" + ts);
     return result;
   }
 }

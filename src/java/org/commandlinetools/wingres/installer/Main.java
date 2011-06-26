@@ -24,13 +24,13 @@ import java.io.File;
  */
 public class Main {
   public static void main(String[] args) {
-    System.err.println("wingres installer");
+    System.out.println("wingres installer");
     if (0 < args.length) {
-      System.err.println("args[0]=" + args[0]);
+      System.out.println("args[0]=" + args[0]);
       File target = new File(args[0]);
       boolean created = target.mkdirs();
       if (!created) {
-        System.err.println("Wingres Installer unable to create " + target.getAbsolutePath());
+        System.out.println("Wingres Installer unable to create " + target.getAbsolutePath());
       }
     }
   }

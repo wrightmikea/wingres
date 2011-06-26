@@ -16,12 +16,46 @@
    under the License.
 
 -->
-<project name="run-wingres-tests" default="run-tests" basedir="../..">
+<project name="run-wingres-tests" default="run.tests" basedir="../..">
 
     <property file="${basedir}/src/ant/build.properties"/>
 
-    <target name="run-tests">
-        <echo>tests tbd</echo>
+    <target name="init">
+        <mkdir dir="${compiled.test.classes}"/>
+        <mkdir dir="${reports.dir}"/>
+        <mkdir dir="${reports.dir}/raw"/>
+        <mkdir dir="${tmp.dir}"/>
+    </target>
+
+    <target name="compile.tests" depends="init">
+        <javac srcdir="${java.test.dir}" destdir="${compiled.test.classes}">
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <pathelement location="${compiled.src.classes}"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="run.tests" depends="compile.tests"
+            description="tests org.commandlinetools.wingres">
+
+        <junit printsummary="yes" haltonfailure="yes" showoutput="yes" dir="${tmp.dir}">
+            <classpath>
+                <pathelement location="${compiled.src.classes}"/>
+                <pathelement location="${compiled.test.classes}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <batchtest fork="yes" todir="${reports.dir}/raw/">
+                <formatter type="xml"/>
+                <fileset dir="${java.test.dir}">
+                    <include name="**/*Test*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
     </target>
 
 </project>
