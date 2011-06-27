@@ -18,6 +18,7 @@
 package org.commandlinetools.wingres.installer;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * Installs wingres
@@ -25,13 +26,29 @@ import java.io.File;
 public class Main {
   public static void main(String[] args) {
     System.out.println("wingres installer");
+    String override = null;
     if (0 < args.length) {
-      System.out.println("args[0]=" + args[0]);
-      File target = new File(args[0]);
-      boolean created = target.mkdirs();
-      if (!created) {
-        System.out.println("Wingres Installer unable to create " + target.getAbsolutePath());
-      }
+      override = args[0];
     }
+    File target = new File(getGresHome(override));
+    System.out.println("target=" + target.getAbsolutePath());
+    boolean created = target.mkdirs();
+    if (!created) {
+        System.out.println("Wingres Installer unable to create " + target.getAbsolutePath());
+    }
+  }
+
+  private static String getGresHome(String override) {
+    String gresHome = override;
+    // if not overridden, look for environment variable
+    if (null == gresHome) {
+       Map<String, String> env = System.getenv();
+       gresHome = env.get("GRES_HOME");
+    }
+    // if neither overridden nor specified in environment, use default
+    if (null == gresHome) {
+         gresHome="C:\\wingres";
+    }
+    return gresHome;
   }
 }

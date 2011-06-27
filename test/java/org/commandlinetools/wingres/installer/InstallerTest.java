@@ -38,6 +38,13 @@ public class InstallerTest extends TestCase {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyymmdd-HHmmss-SSS");
     String ts = sdf.format(now);
     File result = new File("wingres" + ts);
+    log("newTempDir " + result.getAbsolutePath());
     return result;
+  }
+  private void log(String diag) {
+    String gresDebug = System.getProperty("GRES_DEBUG");
+    if (null != gresDebug) {
+      System.err.println("log: " + diag);
+    }
   }
 }
