@@ -35,9 +35,9 @@ public class InstallerTest extends TestCase {
   }
   private File newTempDir() {
     Date now = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyymmdd-HHmmss-SSS");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS");
     String ts = sdf.format(now);
-    File result = new File("wingres" + ts);
+    File result = new File("build/tmp/wingres" + ts);
     log("newTempDir " + result.getAbsolutePath());
     return result;
   }

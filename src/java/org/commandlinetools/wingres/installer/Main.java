@@ -33,8 +33,10 @@ public class Main {
     File target = new File(getGresHome(override));
     System.out.println("target=" + target.getAbsolutePath());
     boolean created = target.mkdirs();
-    if (!created) {
-        System.out.println("Wingres Installer unable to create " + target.getAbsolutePath());
+    if (created) {
+      createDirectoryStructure(target.getAbsolutePath());
+    } else {
+      System.out.println("Wingres Installer unable to create " + target.getAbsolutePath());
     }
   }
 
@@ -42,13 +44,34 @@ public class Main {
     String gresHome = override;
     // if not overridden, look for environment variable
     if (null == gresHome) {
-       Map<String, String> env = System.getenv();
-       gresHome = env.get("GRES_HOME");
+      Map<String, String> env = System.getenv();
+      gresHome = env.get("GRES_HOME");
     }
     // if neither overridden nor specified in environment, use default
     if (null == gresHome) {
-         gresHome="C:\\wingres";
+      gresHome = "C:\\wingres";
     }
     return gresHome;
+  }
+
+  private static void createDirectoryStructure(String gresHome) {
+    String[] subDirNames = { "bin", "etc", "lib", "var/data", "var/reports" };
+    String diag = null;
+    try {
+        for (String subDirName : subDirNames) {
+          diag = subDirName;
+          createSubDir(gresHome, subDirName);
+        }
+    } catch(Exception ex) {
+       System.err.println("error creating " + diag + ", caught " + ex);
+    }
+  }
+
+  private static void createSubDir(String gresHome, String subDirName) throws Exception {
+    File subDir = new File(gresHome, subDirName);
+    boolean created = subDir.mkdirs();
+    if (!created) {
+      throw new Exception("unable to create " + subDir.getAbsolutePath());
+    }
   }
 }
