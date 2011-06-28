@@ -18,33 +18,19 @@
 package org.commandlinetools.wingres.installer;
 
 import junit.framework.TestCase;
+import org.commandlinetools.wingres.installer.test.helpers.Utility;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Tests the wingres installer
  */
 public class InstallerTest extends TestCase {
   public void testFirst() {
-     File tmpDir = newTempDir();
+     File tmpDir = Utility.newTempDir();
     assertEquals("precondition: target directory does not yet exist", false, tmpDir.exists());
      Main.main(new String[]{tmpDir.getAbsolutePath()});
     assertEquals("postcondition: target directory created", true, tmpDir.exists());
   }
-  private File newTempDir() {
-    Date now = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS");
-    String ts = sdf.format(now);
-    File result = new File("build/tmp/wingres" + ts);
-    log("newTempDir " + result.getAbsolutePath());
-    return result;
-  }
-  private void log(String diag) {
-    String gresDebug = System.getProperty("GRES_DEBUG");
-    if (null != gresDebug) {
-      System.err.println("log: " + diag);
-    }
-  }
+
 }
