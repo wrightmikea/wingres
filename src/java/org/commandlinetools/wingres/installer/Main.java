@@ -17,7 +17,10 @@
  */
 package org.commandlinetools.wingres.installer;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -38,6 +41,7 @@ public class Main {
     } else {
       System.out.println("Wingres Installer unable to create " + target.getAbsolutePath());
     }
+    populateFiles(target.getAbsolutePath());
   }
 
   private static String getGresHome(String override) {
@@ -55,15 +59,15 @@ public class Main {
   }
 
   private static void createDirectoryStructure(String gresHome) {
-    String[] subDirNames = { "bin", "etc", "lib", "var/data", "var/reports" };
+    String[] subDirNames = {"bin", "etc", "lib", "var/data", "var/reports"};
     String diag = null;
     try {
-        for (String subDirName : subDirNames) {
-          diag = subDirName;
-          createSubDir(gresHome, subDirName);
-        }
-    } catch(Exception ex) {
-       System.err.println("error creating " + diag + ", caught " + ex);
+      for (String subDirName : subDirNames) {
+        diag = subDirName;
+        createSubDir(gresHome, subDirName);
+      }
+    } catch (Exception ex) {
+      System.err.println("error creating " + diag + ", caught " + ex);
     }
   }
 
@@ -72,6 +76,21 @@ public class Main {
     boolean created = subDir.mkdirs();
     if (!created) {
       throw new Exception("unable to create " + subDir.getAbsolutePath());
+    }
+  }
+
+  private static void populateFiles(String gresHome) {
+    populateBinDir(gresHome);
+  }
+
+  private static void populateBinDir(String gresHome) {
+    try {
+      URL source = new URL("http://gres.commandlinetools.org/downloads/gres-snapshot-0.0.1.jar");
+      File dest = new File(gresHome, "bin/gres.cmd");
+      int timeout = 1000;
+      FileUtils.copyURLToFile(source, dest, timeout, timeout);
+    } catch (Exception ex) {
+       System.err.println("ex=" + ex);
     }
   }
 }

@@ -19,6 +19,7 @@ package org.commandlinetools.wingres.installer;
 
 import junit.framework.TestCase;
 import org.commandlinetools.wingres.installer.test.helpers.Utility;
+import sun.net.idn.StringPrep;
 
 import java.io.File;
 
@@ -27,10 +28,26 @@ import java.io.File;
  */
 public class InstallerTest extends TestCase {
   public void testFirst() {
-     File tmpDir = Utility.newTempDir();
-    assertEquals("precondition: target directory does not yet exist", false, tmpDir.exists());
-     Main.main(new String[]{tmpDir.getAbsolutePath()});
-    assertEquals("postcondition: target directory created", true, tmpDir.exists());
+    File tmpDir = Utility.newTempDir();
+    assertFalse("precondition: target directory does not yet exist", tmpDir.exists());
+    Main.main(new String[]{tmpDir.getAbsolutePath()});
+    assertTrue("postcondition: target directory created", tmpDir.exists());
+    assertExists(tmpDir, new String[] {"bin", "etc", "lib", "var/data", "var/reports"});
+    assertExists(tmpDir, "bin", new String[] {"gres.cmd" });
   }
 
+  private void assertExists(File grandparent, String parentName, String[] childrenNames) {
+    File parent = new File(grandparent, parentName);
+    assertExists(parent, childrenNames);
+  }
+  private void assertExists(File parent, String[] childrenNames) {
+    for (String childName: childrenNames) {
+      assertExists(parent, childName);
+    }
+  }
+
+  private void assertExists(File parent, String childName) {
+    File target = new File(parent, childName);
+    assertTrue("postcondition: expect to create target: " + target.getAbsolutePath(), target.exists());
+  }
 }
