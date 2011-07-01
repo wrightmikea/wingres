@@ -33,7 +33,8 @@ public class InstallerTest extends TestCase {
     Main.main(new String[]{tmpDir.getAbsolutePath()});
     assertTrue("postcondition: target directory created", tmpDir.exists());
     assertExists(tmpDir, new String[] {"bin", "etc", "lib", "var/data", "var/reports"});
-    assertExists(tmpDir, "bin", new String[] {"gres.cmd" });
+    assertExists(tmpDir, "var/data", new String[] {"wingres-snapshot-0.0.1.zip" });
+    assertExists(tmpDir, "bin", new String[] { "gres.cmd" });
   }
 
   private void assertExists(File grandparent, String parentName, String[] childrenNames) {

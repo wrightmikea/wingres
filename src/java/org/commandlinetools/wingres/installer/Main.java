@@ -17,11 +17,15 @@
  */
 package org.commandlinetools.wingres.installer;
 
+import com.sun.tools.javac.util.DefaultFileManager;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * Installs wingres
@@ -84,13 +88,28 @@ public class Main {
   }
 
   private static void populateBinDir(String gresHome) {
-    try {
-      URL source = new URL("http://gres.commandlinetools.org/downloads/gres-snapshot-0.0.1.jar");
-      File dest = new File(gresHome, "bin/gres.cmd");
+    getInstallerArchiveFromS3(gresHome);
+    unzipInstallerArchive(gresHome);
+
+  }
+  private static void getInstallerArchiveFromS3(String gresHome) {
+     try {
+      URL source = new URL("https://s3.amazonaws.com/commandlinetools/wingres-snapshot-0.0.1.zip");
+      File dest = new File(gresHome, "/var/data/wingres-snapshot-0.0.1.zip");
       int timeout = 1000;
       FileUtils.copyURLToFile(source, dest, timeout, timeout);
     } catch (Exception ex) {
        System.err.println("ex=" + ex);
+    }
+  }
+  private static void unzipInstallerArchive(String gresHome) {
+    try {
+      ZipFile installerArchive = new ZipFile(gresHome + "/var/data/wingres-snapshot-0.0.1.zip");
+      ZipEntry gresCmd = installerArchive.getEntry("gres.cmd");
+      InputStream is = installerArchive.getInputStream(gresCmd);
+      FileUtils.copyInputStreamToFile(is, new File(gresHome, "/bin/gres.cmd"));
+    } catch (Exception ex) {
+      System.err.println("ex=" + ex);
     }
   }
 }
